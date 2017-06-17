@@ -1,0 +1,46 @@
+---
+
+- hosts: ansible_test
+  remote_user: root
+  vars:
+    first_initial: r
+    last_name: race
+
+  tasks:
+  - name: Configure Static IP
+    nmcli:
+      conn_name: ansible_eth1
+      ifname: eth1
+      type: ethernet
+      ip4: 10.0.0.10
+      gw4: 10.0.0.1
+      state: present
+  - name: Configure SSH with Certificates
+    command: /usr/bin/touch /ansible-test/ansible_ssh.text
+  - name: Set DNS
+    nmcli:
+      conn_name: ansible_eth1
+      type: ethernet
+      dns4: 8.8.8.8
+      state: present
+#Set NTP##################################################
+  - name: Install NTP
+    yum: name=ntp state=installed
+  - name: COnfigure NTP
+    template: src=files/ntp.conf.j2 dest=/etc/ntp.conf
+  - name: Start and Enable NTP
+    service: name=ntpd state=started enabled=yes
+##########################################################
+  - name: Create User
+    user:
+      name: "{{ first_initial }}{{ last_name }}"
+      shell: /bin/bash
+      createhome: yes
+      append: yes
+  - name: Add user to sudoers
+    command: /usr/bin/touch /ansible-test/ansible_sudoer.text
+  - name: Add notice-levl syslog file
+    command: /usr/bin/touch /ansible-test/ansible_log_create.text
+  - name: log Ansible Configuration
+    command: /usr/bin/touch /ansible-test/ansible_log.text
+
