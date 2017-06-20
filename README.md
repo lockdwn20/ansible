@@ -18,3 +18,5 @@ Configure a VM with Ansible to:
    - log a NOTICE level syslog message to localhost each time the Ansible script is run.
  
 5. Source-code for this Ansible playbook should be stored in a GIT repo. Each team-member should have at least one commit to this git repo. Private GIT hosting is available at bitbucket.com. We will RUN the script against a VM. If it works, you pass. The suspense is several weeks out so this doesn't interfere with current, scheduled training, but it will require both self-study, teamwork, and project-management, ie steady progress over time.
+
+Testing
