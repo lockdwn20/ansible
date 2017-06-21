@@ -4,33 +4,33 @@
 VAGRANTFILE_API_VERSION = "2"
 
 # Set to 'true' when testing new base box builds locally.
-TEST_MODE = true
+TEST_MODE = false
 LOCAL_BOX_DIRECTORY = "file://~/Downloads/"
 
 # Uncomment when explicitly testing VirtualBox.
-# PROVIDER_UNDER_TEST = "virtualbox"
-# NETWORK_PRIVATE_IP_PREFIX = "172.16.3."
+ PROVIDER_UNDER_TEST = "virtualbox"
+ NETWORK_PRIVATE_IP_PREFIX = "172.16.3."
 
 # Uncomment when explicitly testing VMWare.
-PROVIDER_UNDER_TEST = "vmware"
- NETWORK_PRIVATE_IP_PREFIX = "192.168.3."
+# PROVIDER_UNDER_TEST = "vmware"
+# NETWORK_PRIVATE_IP_PREFIX = "192.168.3."
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.insert_key = false
 
   # VirtualBox.
-#  config.vm.provider :virtualbox do |v|
-#    v.memory = 1024
-#    v.cpus = 3
-#    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-#    v.customize ["modifyvm", :id, "--ioapic", "on"]
-#  end
+  config.vm.provider :virtualbox do |v|
+    v.memory = 1024
+    v.cpus = 1
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ["modifyvm", :id, "--ioapic", "on"]
+  end
 
   # VMware Fusion.
-  config.vm.provider :vmware_fusion do |v, override|
-    v.vmx["memsize"] = 1024
-    v.vmx["numvcpus"] = 1
-  end
+#  config.vm.provider :vmware_fusion do |v, override|
+#    v.vmx["memsize"] = 1024
+#    v.vmx["numvcpus"] = 1
+#  end
 
   # Ubuntu 16.04 - Xenial Xerus
 #  config.vm.define "ubuntu1604" do |ubuntu1604|
@@ -92,7 +92,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # Ansible.
     centos7.vm.provision "ansible" do |ansible|
-      ansible.playbook = "playbook.yml"
+      ansible.playbook = "ansible_vm_cfg.yml"
     end
   end
 
