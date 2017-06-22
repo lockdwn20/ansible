@@ -1,6 +1,7 @@
 ---
 
 - hosts: all
+  become: true
 #  remote_user: root
   vars:
     first_initial: r
@@ -9,6 +10,7 @@
     new_net_connection_name: ansible_eth1
     new_net_connection_type: ethernet
     new_net_connection_ip: 10.0.0.10
+    new_net_connection_cidr: /24
     new_net_connection_gw: 10.0.0.1
     new_net_connection_dns: 8.8.8.8
 
@@ -20,41 +22,56 @@
       state: installed
     with_items:
       - NetworkManager-glib
-    become: true
     when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
-#Set Network Interface######################################
-  - name: Configure Static IP For Redhat Based Systems
+#Required install for working network-manager through Ansible for Debian Based Systems
+  - name: Verify network-manager is installed
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - network-manager
+      - python-dbus
+      - libnm-glib-dev
+    when: ansible_os_family == "Debian" #This command is only applicable to Debian based systems
+#Set Network Interface for RedHat Systems######################################
+  - name: Configure Static IP for new Logical Connection
     nmcli:
       conn_name: "{{ new_net_connection_name }}"
-      ifname: "{{ ansible_default_ipv4.interface }}"
+      ifname: "{{ ansible_default_ipv4.interface }}" #This is set to be a new logical connection under the exsiting default interface
       type: "{{ new_net_connection_type }}"
-      ip4: "{{ new_net_connection_ip }}"
+      ip4: "{{ new_net_connection_ip }}{{ new_net_connection_cidr}}"
       gw4: "{{ new_net_connection_gw }}"
       state: present
-    become: true
-    when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
-#Set DNS in newly created interface
+#Set DNS in newly created interface for RedHat Systems
   - name: Set DNS
     nmcli:
       conn_name: "{{ new_net_connection_name }}"
       type: "{{ new_net_connection_type }}"
       dns4: "{{ new_net_connection_dns }}"
       state: present
-    become: true
-    when: ansible_os_family == "RedHat"  #This command is only applicable to RedHat based systems
-  - name: Restart Network Interface
+#Restart Network Interface
+  - name: Restart Redhat Network Interface
     command: /usr/sbin/ifup ifcfg-"{{ new_net_connection_name}}"
-    become: true
+    when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
+  - name: Restart Debian Network Interface
+    command: nmcli connection up "{{ new_net_connection_name}}"
+    when: ansible_os_family == "Debian" #This command is only applicable to Debian based systems
+    ignore_errors: true
 #Set NTP##################################################
-  - name: Install NTP
+  - name: Install NTP on RedHat based systems
     yum: name=ntp state=installed
-    become: true
+    when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
+  - name: Install NTP on Debian based systems
+    apt: name=ntp state=present
+    when: ansible_os_family == "Debian" #This command is only applicable to Debian based systems
   - name: Configure NTP
     template: src=ntp.conf.j2 dest=/etc/ntp.conf
-    become: true
   - name: Start and Enable NTP
     service: name=ntpd state=started enabled=yes
-    become: true
+    when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
+  - name: Start and Enable NTP
+    service: name=ntp state=started enabled=yes
+    when: ansible_os_family == "Debian" #This command is only applicable to Debian based systems
 #Create and Configure User################################
   - name: Create User
     user:
@@ -62,7 +79,6 @@
       shell: /bin/bash
       createhome: yes
       append: yes
-    become: true
   - name: Add user to sudoers
     command: /usr/bin/touch /tmp/ansible_sudoer.text
 ###########################################################

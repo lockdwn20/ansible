@@ -5,7 +5,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 # Set to 'true' when testing new base box builds locally.
 TEST_MODE = false
-LOCAL_BOX_DIRECTORY = "file://~/Downloads/"
+#LOCAL_BOX_DIRECTORY = "file://~/Downloads/"
 
 # Uncomment when explicitly testing VirtualBox.
  PROVIDER_UNDER_TEST = "virtualbox"
