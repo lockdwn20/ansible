@@ -13,7 +13,7 @@
     new_net_connection_dns: 8.8.8.8
 
   tasks:
-#Temporary for Testing purposes with Vagrant
+#Required install for working NetworkManager through Ansible
   - name: Verify NetworkManager libraries are installed
     yum:
       name: "{{ item }}"
@@ -41,7 +41,7 @@
       state: present
     become: true
     when: ansible_os_family == "RedHat"  #This command is only applicable to RedHat based systems
-  - name: Restart Network Interface #The network interface start will fail since there is no confirmed physical interface to use
+  - name: Restart Network Interface
     command: /usr/sbin/ifup ifcfg-"{{ new_net_connection_name}}"
     become: true
 #Set NTP##################################################
