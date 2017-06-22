@@ -21,6 +21,7 @@
     with_items:
       - NetworkManager-glib
     become: true
+    when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
 #Set Network Interface######################################
   - name: Configure Static IP For Redhat Based Systems
     nmcli:

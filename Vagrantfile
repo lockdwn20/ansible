@@ -33,20 +33,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #  end
 
   # Ubuntu 16.04 - Xenial Xerus
-#  config.vm.define "ubuntu1604" do |ubuntu1604|
-#    ubuntu1604.vm.hostname = "ubuntu1604test"
-#    if not TEST_MODE
-#      ubuntu1604.vm.box = "geerlingguy/ubuntu1604"
-#    else
-#      ubuntu1604.vm.box = LOCAL_BOX_DIRECTORY + PROVIDER_UNDER_TEST + "-ubuntu1604.box"
-#    end
-#    ubuntu1604.vm.network :private_network, ip: NETWORK_PRIVATE_IP_PREFIX + "2"
+  config.vm.define "ubuntu1604" do |ubuntu1604|
+    ubuntu1604.vm.hostname = "ubuntu1604test"
+    if not TEST_MODE
+      ubuntu1604.vm.box = "geerlingguy/ubuntu1604"
+    else
+      ubuntu1604.vm.box = LOCAL_BOX_DIRECTORY + PROVIDER_UNDER_TEST + "-ubuntu1604.box"
+    end
+    ubuntu1604.vm.network :private_network, ip: NETWORK_PRIVATE_IP_PREFIX + "2"
 
     # Ansible.
-#    ubuntu1604.vm.provision "ansible" do |ansible|
-#      ansible.playbook = "playbook.yml"
-#    end
-#  end
+    ubuntu1604.vm.provision "ansible" do |ansible|
+      ansible.playbook = "ansible_vm_cfg.yml"
+    end
+  end
 
   # Ubuntu 14.04 - Trusty Tahr
 #  config.vm.define "ubuntu1404" do |ubuntu1404|
