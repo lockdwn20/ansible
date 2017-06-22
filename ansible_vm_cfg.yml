@@ -16,26 +16,41 @@
       ip4: 10.0.0.10
       gw4: 10.0.0.1
       state: present
-    ignore_errors: yes
+    when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
+    register: result
+    ignore_errors: yes #will ignore errors due to nmcli not being installed
+#Template is made available if vm is not configured for nmcli
+  - template: src=ifcfg-eth1.j2 dest=/etc/sysconfig/network-scripts/ifcfg-eth1
+    become: true
+    when: result|failed
+#Set DNS in newly created interface
   - name: Set DNS
     nmcli:
       conn_name: ansible_eth1
       type: ethernet
       dns4: 8.8.8.8
       state: present
+    when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
+    register: result
     ignore_errors: yes
-###########################################################
+#The DNS entry will be entered into the template file inserted above if nmcli is not configured for use
+  - command: echo "DNS1=8.8.8.8" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+    become: true
+    when: result|failed
+  - name: Restart Network Interface #The network interface start will fail since there is no confirmed interface to use
+    command: /usr/sbin/ifup /etc/sysconfig/network-scripts/ifcfg-eth1
+    become: true
+    ignore_errors: yes
 #Set NTP##################################################
   - name: Install NTP
     yum: name=ntp state=installed
     become: true
-  - name: COnfigure NTP
+  - name: Configure NTP
     template: src=ntp.conf.j2 dest=/etc/ntp.conf
     become: true
   - name: Start and Enable NTP
     service: name=ntpd state=started enabled=yes
     become: true
-##########################################################
 #Create and Configure User################################
   - name: Create User
     user:
