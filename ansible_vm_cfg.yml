@@ -1,46 +1,49 @@
 ---
 
 - hosts: all
-  remote_user: root
+#  remote_user: root
   vars:
     first_initial: r
     last_name: race
+    username: "{{ first_initial }}{{ last_name }}"
+    new_net_connection_name: ansible_eth1
+    new_net_connection_type: ethernet
+    new_net_connection_ip: 10.0.0.10
+    new_net_connection_gw: 10.0.0.1
+    new_net_connection_dns: 8.8.8.8
 
   tasks:
-#Set Network Interface######################################
-  - name: Configure Static IP
-    nmcli:
-      conn_name: ansible_eth1
-      ifname: eth1
-      type: ethernet
-      ip4: 10.0.0.10
-      gw4: 10.0.0.1
-      state: present
-    when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
-    register: result
-    ignore_errors: yes #will ignore errors due to nmcli not being installed
-#Template is made available if vm is not configured for nmcli
-  - template: src=ifcfg-eth1.j2 dest=/etc/sysconfig/network-scripts/ifcfg-eth1
+#Temporary for Testing purposes with Vagrant
+  - name: Verify NetworkManager libraries are installed
+    yum:
+      name: "{{ item }}"
+      state: installed
+    with_items:
+      - NetworkManager-glib
     become: true
-    when: result|failed
+#Set Network Interface######################################
+  - name: Configure Static IP For Redhat Based Systems
+    nmcli:
+      conn_name: "{{ new_net_connection_name }}"
+      ifname: "{{ ansible_default_ipv4.interface }}"
+      type: "{{ new_net_connection_type }}"
+      ip4: "{{ new_net_connection_ip }}"
+      gw4: "{{ new_net_connection_gw }}"
+      state: present
+    become: true
+    when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
 #Set DNS in newly created interface
   - name: Set DNS
     nmcli:
-      conn_name: ansible_eth1
-      type: ethernet
-      dns4: 8.8.8.8
+      conn_name: "{{ new_net_connection_name }}"
+      type: "{{ new_net_connection_type }}"
+      dns4: "{{ new_net_connection_dns }}"
       state: present
-    when: ansible_os_family == "RedHat" #This command is only applicable to RedHat based systems
-    register: result
-    ignore_errors: yes
-#The DNS entry will be entered into the template file inserted above if nmcli is not configured for use
-  - command: echo "DNS1=8.8.8.8" >> /etc/sysconfig/network-scripts/ifcfg-eth1
     become: true
-    when: result|failed
-  - name: Restart Network Interface #The network interface start will fail since there is no confirmed interface to use
-    command: /usr/sbin/ifup /etc/sysconfig/network-scripts/ifcfg-eth1
+    when: ansible_os_family == "RedHat"  #This command is only applicable to RedHat based systems
+  - name: Restart Network Interface #The network interface start will fail since there is no confirmed physical interface to use
+    command: /usr/sbin/ifup ifcfg-"{{ new_net_connection_name}}"
     become: true
-    ignore_errors: yes
 #Set NTP##################################################
   - name: Install NTP
     yum: name=ntp state=installed
@@ -54,7 +57,7 @@
 #Create and Configure User################################
   - name: Create User
     user:
-      name: "{{ first_initial }}{{ last_name }}"
+      name: "{{ username }}"
       shell: /bin/bash
       createhome: yes
       append: yes
