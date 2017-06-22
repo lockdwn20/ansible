@@ -30,7 +30,7 @@
     yum: name=ntp state=installed
     become: true
   - name: COnfigure NTP
-    template: src=files/ntp.conf.j2 dest=/etc/ntp.conf
+    template: src=ntp.conf.j2 dest=/etc/ntp.conf
     become: true
   - name: Start and Enable NTP
     service: name=ntpd state=started enabled=yes
