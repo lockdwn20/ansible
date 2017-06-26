@@ -15,8 +15,9 @@
     new_net_connection_dns: 8.8.8.8
 
   tasks:
-  - include: network_cfg.yml
-  - include: ntp_cfg.yml
+  - include: tasks/network_cfg.yml
+  - include: tasks/ntp_cfg.yml
+
 #Create and Configure User################################
   - name: Create User
     user:
