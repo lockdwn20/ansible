@@ -30,11 +30,12 @@
     when: ansible_os_family == "Debian"
   - name: Configure network-manager
     template: src=files/NetworkManager.conf.j2 dest=/etc/NetworkManager/NetworkManager.conf
+    when: ansible_os_family == "Debian"
   - name: Start network-manager
     service:
       name: network-manager
       state: started
-
+    when: ansible_os_family == "Debian"
 
 #Configuration of Logical Network Connection on any platform running Network Manager
   - name: Configure Static IP for new Logical Connection
