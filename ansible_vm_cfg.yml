@@ -17,18 +17,10 @@
   tasks:
   - include: tasks/network_cfg.yml
   - include: tasks/ntp_cfg.yml
-
-#Create and Configure User################################
-  - name: Create User
-    user:
-      name: "{{ username }}"
-      shell: /bin/bash
-      createhome: yes
-      append: yes
-  - name: Add user to sudoers
-    command: /usr/bin/touch /tmp/ansible_sudoer.text
+  - include: tasks/createuser_cfg.yml
+  - include: tasks/sudoers_cfg.yml
 ###########################################################
-  - include: tasks/sshd_cfg.yml
+#  - include: tasks/sshd_cfg.yml
   - name: Add notice-levl syslog file
     command: /usr/bin/touch /tmp/ansible_log_create.text
   - include: tasks/syslog_cfg.yml

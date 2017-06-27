@@ -1,0 +1,8 @@
+---
+# create user
+- name: Create user
+  user:
+    name: "{{ username }}"
+    shell: /bin/bash
+    createhome: yes
+    append: yes

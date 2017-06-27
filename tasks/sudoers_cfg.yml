@@ -1,0 +1,20 @@
+---
+# add user to sudoers
+- name: Make sure we have a 'wheel' group
+  group:
+    name: wheel
+    state: present
+
+- name: Allow 'wheel' group to have sudo access
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) ALL'
+    validate: visudo -cf %s
+
+- name: Add sudoers users to wheel group
+  user:
+    name: "{{ username }}"
+    groups: wheel
+    append: yes
