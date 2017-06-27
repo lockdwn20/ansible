@@ -8,19 +8,20 @@
     last_name: race
     username: "{{ first_initial }}{{ last_name }}"
     new_net_connection_name: ansible_eth1
-    interface_name: ansible_default_ipv4.interface
+    interface_name: "{{ ansible_default_ipv4.interface }}" 
     new_net_connection_type: ethernet
     new_net_connection_ip: 10.0.0.10
     new_net_connection_cidr: /24
     new_net_connection_gw: 10.0.0.1
     new_net_connection_dns: 8.8.8.8
     user_shell: /bin/bash
+    ssh_key: "{{ lookup('file', 'files/keys/rrace.pub') }}"
 
   tasks:
   - include: tasks/network_cfg.yml
   - include: tasks/ntp_cfg.yml
   - include: tasks/createuser_cfg.yml
   - include: tasks/sudoers_cfg.yml
-#  - include: tasks/ssh_user_cfg.yml
-#  - include: tasks/sshd_cfg.yml
+  - include: tasks/ssh_user_cfg.yml
+  - include: tasks/sshd_cfg.yml
   - include: tasks/syslog_cfg.yml

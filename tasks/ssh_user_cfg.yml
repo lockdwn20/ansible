@@ -1,12 +1,12 @@
 ---
-# configure ssh for user
-- name: Create ssh keys for defined user
-  user:
-    name: "{{ username }}"
-    generate_ssh_key: yes
-
-- name: Copy generated public key
-  command: cp /home/{{ username }}/.ssh/id_rsa.pub /tmp/{{ username }}_id_rsa.pub
+#configure ssh for user
+# - name: Create ssh keys for defined user
+#   user:
+#     name: "{{ username }}"
+#     generate_ssh_key: yes
+#
+# - name: Copy generated public key
+#   command: cp /home/{{ username }}/.ssh/id_rsa.pub /tmp/{{ username }}_id_rsa.pub
 
 # - name: Copy generated public key
 #   copy:
@@ -16,4 +16,5 @@
 - name: Add the authorized_key to the user "{{ username }}"
   authorized_key:
     user: "{{ username }}"
-    key: "{{ lookup('file', '/tmp/' + {{ username }} + '_id_rsa.pub') }}"
+    state: present
+    key: "{{ ssh_key }}" #"{{ lookup('file', '/home/{{ username }}/.ssh/id_rsa.pub') }}"
