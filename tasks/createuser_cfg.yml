@@ -3,6 +3,6 @@
 - name: Create user
   user:
     name: "{{ username }}"
-    shell: /bin/bash
+    shell: "{{ user_shell }}"
     createhome: yes
     append: yes

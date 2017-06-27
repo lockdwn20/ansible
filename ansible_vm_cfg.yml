@@ -14,6 +14,7 @@
     new_net_connection_cidr: /24
     new_net_connection_gw: 10.0.0.1
     new_net_connection_dns: 8.8.8.8
+    user_shell: /bin/bash
 
   tasks:
   - include: tasks/network_cfg.yml
