@@ -1,0 +1,6 @@
+---
+#Creation of syslog file for ansible Notice Level logs
+
+# Create an additional syslog file under /var/log/${username}-alerts
+-  name: Create a Syslog
+   file: path=/var/log/{{ username }}-alerts state=touch mode=0660

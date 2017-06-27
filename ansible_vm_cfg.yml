@@ -28,9 +28,7 @@
   - name: Add user to sudoers
     command: /usr/bin/touch /tmp/ansible_sudoer.text
 ###########################################################
-  - name: Configure SSH with Certificates
-    command: /usr/bin/touch /tmp/ansible_ssh.text
+  - include: tasks/sshd_cfg.yml
   - name: Add notice-levl syslog file
     command: /usr/bin/touch /tmp/ansible_log_create.text
-  - name: log Ansible Configuration
-    command: /usr/bin/touch /tmp/ansible_log.text
+  - include: tasks/syslog_cfg.yml
