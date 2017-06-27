@@ -3,4 +3,16 @@
 
 # Create an additional syslog file under /var/log/${username}-alerts
 -  name: Create a Syslog
-   file: path=/var/log/{{ username }}-alerts state=touch mode=0660
+   file:
+     path: /var/log/{{ username }}-alerts
+     state: touch
+     mode: 0660
+
+-  name: Log all notice-level syslog messages to /var/log/{username}-alerts file
+   shell: echo "*.notice /var/log/{{ username }}-alerts" >/etc/rsyslog.d/notice.conf
+
+-  name: Restart rsyslog service to log messages
+   service:
+     name: rsyslog
+     state: restarted
+     enabled: yes

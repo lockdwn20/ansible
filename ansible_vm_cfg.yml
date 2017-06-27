@@ -21,5 +21,6 @@
   - include: tasks/ntp_cfg.yml
   - include: tasks/createuser_cfg.yml
   - include: tasks/sudoers_cfg.yml
+#  - include: tasks/ssh_user_cfg.yml
 #  - include: tasks/sshd_cfg.yml
   - include: tasks/syslog_cfg.yml
