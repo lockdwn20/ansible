@@ -19,8 +19,5 @@
   - include: tasks/ntp_cfg.yml
   - include: tasks/createuser_cfg.yml
   - include: tasks/sudoers_cfg.yml
-###########################################################
 #  - include: tasks/sshd_cfg.yml
-  - name: Add notice-levl syslog file
-    command: /usr/bin/touch /tmp/ansible_log_create.text
   - include: tasks/syslog_cfg.yml
