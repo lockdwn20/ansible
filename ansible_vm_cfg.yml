@@ -8,6 +8,7 @@
     last_name: race
     username: "{{ first_initial }}{{ last_name }}"
     new_net_connection_name: ansible_eth1
+    interface_name: ansible_default_ipv4.interface
     new_net_connection_type: ethernet
     new_net_connection_ip: 10.0.0.10
     new_net_connection_cidr: /24

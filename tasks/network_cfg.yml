@@ -41,7 +41,7 @@
   - name: Configure Static IP for new Logical Connection
     nmcli:
       conn_name: "{{ new_net_connection_name }}"
-      ifname: "{{ ansible_default_ipv4.interface }}"
+      ifname: "{{ interface_name }}"
       type: "{{ new_net_connection_type }}"
       ip4: "{{ new_net_connection_ip }}{{ new_net_connection_cidr}}"
       gw4: "{{ new_net_connection_gw }}"
