@@ -6,6 +6,7 @@ In order to utilize this playbook the following pre-requisites must be complete:
  
 1. The user running ansible must have copied their ssh key to each server that they will be configuring:
 	1. ssh-keygen
+
 	1. ssh-copy-id REMOTE_USER@REMOTE_MACHINE
 
 1. The ansible.cfg file must be placed into the ansible server /etc/ansible directory (this config ensures that logging is enabled
