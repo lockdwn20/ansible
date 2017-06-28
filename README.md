@@ -9,7 +9,7 @@ In order to utilize this playbook the following pre-requisites must be complete:
 
 	1. ssh-copy-id REMOTE_USER@REMOTE_MACHINE
 
-1. The ansible.cfg file must be placed into the ansible server /etc/ansible directory (this config ensures that logging is enabled
+1. The ansible.cfg file must be placed into the ansible server /etc/ansible directory (this config ensures that logging is enabled)
 
 1. The /etc/ansible/hosts file needs to contain the appropriate hosts IP Addresses (hostname if DNS configured) to be configured
 
