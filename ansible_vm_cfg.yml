@@ -2,7 +2,7 @@
 
 - hosts: all
   become: true
-#  remote_user: root
+#  remote_user: root 
   vars:
     first_initial: r
     last_name: race
