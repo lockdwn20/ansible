@@ -13,6 +13,8 @@ In order to utilize this playbook the following pre-requisites must be complete:
 
 1. The /etc/ansible/hosts file needs to contain the appropriate hosts IP Addresses (hostname if DNS configured) to be configured
 
+1.  Perform a touch on the /var/log/ansible.log file and assign permissions 644
+
 
 **Running the Playbook**
 
@@ -23,6 +25,8 @@ To run the playbook utilize the appropriate commands:
 1. ansible-playbook ansible_vm_cfg.yml -u REMOTE_USER -kK  //This will connect to the system as the user setup in the prerequisites, the kK options will ask for the user and sudo passwords. 
 
 **Testing the Playbook Results**
+
+1.  On ansible server verify that ansible logged the running of the playbook "cat /var/log/ansible.log"
 
 1.  Attempt to ssh into the system as root (should recieve permission denied)
 
