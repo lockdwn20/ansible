@@ -18,10 +18,25 @@ In order to utilize this playbook the following pre-requisites must be complete:
 
 To run the playbook utilize the appropriate commands:
 
-* ansible all -m ping -u REMOTE_USER  //this is to test connectivity
+1. ansible all -m ping -u REMOTE_USER  //this is to test connectivity
 
-* ansible-playbook ansible_vm_cfg.yml -u REMOTE_USER -kK  //This will connect to the system as the user setup in the prerequisites, the kK options will ask for the user and sudo passwords. 
+1. ansible-playbook ansible_vm_cfg.yml -u REMOTE_USER -kK  //This will connect to the system as the user setup in the prerequisites, the kK options will ask for the user and sudo passwords. 
 
+**Testing the Playbook Results**
+
+1.  Attempt to ssh into the system as root (should recieve permission denied)
+
+1.  Attempt to ssh as the created user "rrace" (should recieve permission denied)
+
+1.  Attempt to ssh as created user "rrace" using key "ansible/files/keys/rrace" (ssh rrace@REMOTE_MACHINE -i /path/to/rrace/key) (Should SUCCEED)
+
+1.  Verify logical network connection "nmcli connection show ansible_eth1"
+
+1.  Verify NTP is working "timedatectl"
+
+1.  Verify log file existence "ls /var/log/rrace-alerts"
+
+1.  Verify sudo "sudo cat /var/log/messages"
 
 **ASSIGNMENT:**
 
