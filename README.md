@@ -1,10 +1,12 @@
 **Setting Up the Playbook**
+
 In order to utilize this playbook the following pre-requisites must be complete:
+
 1. The remote system must already contain an administrator account for use by ansible that is not the root account
  
 1. The user running ansible must have copied their ssh key to each server that they will be configuring:
-* ssh-keygen
-* ssh-copy-id REMOTE_USER@REMOTE_MACHINE
+	1. ssh-keygen
+	1. ssh-copy-id REMOTE_USER@REMOTE_MACHINE
 
 1. The ansible.cfg file must be placed into the ansible server /etc/ansible directory (this config ensures that logging is enabled
 
@@ -12,11 +14,12 @@ In order to utilize this playbook the following pre-requisites must be complete:
 
 
 **Running the Playbook**
+
 To run the playbook utilize the appropriate commands:
 
-* ansible all -m ping -u REMOTE_USER //this is to test connectivity
+* ansible all -m ping -u REMOTE_USER  //this is to test connectivity
 
-* ansible-playbook ansible_vm_cfg.yml -u REMOTE_USER -kK //This will connect to the system as the user setup in the prerequisites, the kK options will ask for the user and sudo passwords. 
+* ansible-playbook ansible_vm_cfg.yml -u REMOTE_USER -kK  //This will connect to the system as the user setup in the prerequisites, the kK options will ask for the user and sudo passwords. 
 
 
 **ASSIGNMENT:**
@@ -35,14 +38,23 @@ Source-code for this Ansible playbook should be stored in a GIT repo. Each team-
 **Playbook Items**
 
 Configure a VM with Ansible to:
+
 1. configure static IPs
+
 1. configure SSH to work with only certificates and not allow root logins
+
 1. set DNS
+
 1. set NTP server to tick.gatech.edu
+
 1. create a user ${first_initial}${last_name}
+
 1. add this user to sudoers
+
 1. add an additional syslog file under /var/log/${username}-alerts so that all notice-level syslog is added to this file
+
 1. log a NOTICE level syslog message to localhost each time the Ansible script is run.
+
 
 
 
